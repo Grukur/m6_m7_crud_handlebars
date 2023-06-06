@@ -52,7 +52,8 @@ app.get("/products", (req, res) => {
     });
 });
 
-//VISTA ACTUALIZAR USUARIOS
+//VISTAS
+//muestra usuario por ID
 app.get("/updateuser/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -68,12 +69,14 @@ app.get("/updateuser/:id", async (req, res) => {
     }
 });
 
+//Muestra todos los usuarios
 app.get("/users", async (req, res) => {
     let usuario = new Usuario();
     let respuesta = usuario.findAll();
     respuesta
-        .then((data) => {
-            res.render("users", {
+    .then((data) => {
+        console.log(data)
+        res.render("users", {
                 usuarios: data.usuarios,
             });
         })
@@ -85,7 +88,7 @@ app.get("/users", async (req, res) => {
 });
 
 //RUTAS DE ENDPOINTS
-
+//Crea usuarios
 app.post("/usuarios", async (req, res) => {
     try {
         let { nombre, apellido, email } = req.body;
@@ -102,7 +105,7 @@ app.post("/usuarios", async (req, res) => {
     }
 });
 
-//ejecuta las modificaciones
+//Ejecuta las modificaciones
 app.put("/usuarios", async (req, res) => {
     try {
         let {id, nombre, apellido, email } = req.body;
@@ -122,6 +125,17 @@ app.put("/usuarios", async (req, res) => {
             code: 500,
             message: "error al guardar el usuario en la bd.",
         });
+    }
+});
+
+app.delete('/usuariosDelete/:id', async(req, res) => {
+    try {
+        let { id } = req.params;
+        let trash = new Usuario;
+        trash.delete(id)
+        //trash.delete(id)
+    } catch (error) {
+        console.log(error)
     }
 });
 

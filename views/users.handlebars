@@ -4,67 +4,85 @@
     <div class="w-75 mx-auto">
         <h2 class="text-center">Formulario de creación de usuarios.</h2>
         <form id="formCreateUser">
-        <label for="createNombre" class="form-label">Nombre</label>
-        <input type="text" name="createNombre" id="createNombre" class="form-control" required>
-        <label for="createApellido" class="form-label">Apellido</label>
-        <input type="text" name="createApellido" id="createApellido" class="form-control" required>
-        <label for="createEmail" class="form-label">Email</label>
-        <input type="email" name="createEmail" id="createEmail" class="form-control" required>
-        <input type="submit" value="Crear" class="btn btn-primary">
-    </form>
+            <label for="createNombre" class="form-label">Nombre</label>
+            <input type="text" name="createNombre" id="createNombre" class="form-control" required>
+            <label for="createApellido" class="form-label">Apellido</label>
+            <input type="text" name="createApellido" id="createApellido" class="form-control" required>
+            <label for="createEmail" class="form-label">Email</label>
+            <input type="email" name="createEmail" id="createEmail" class="form-control" required>
+            <input type="submit" value="Crear" class="btn btn-primary">
+        </form>
     </div>
 
 </section>
 <hr>
 <section>
     {{#if usuarios}}
-        {{>table_usuarios 
-            usuarios=usuarios
-        }}
+    {{>table_usuarios
+    usuarios=usuarios
+    }}
     {{else}}
-        <h2>No hay usuarios para mostrar.</h2>
+    <h2>No hay usuarios para mostrar.</h2>
     {{/if}}
 </section>
 
 <style>
-    #formCreateUser input{
-        margin:3px 0px;
+    #formCreateUser input {
+        margin: 3px 0px;
     }
 </style>
 
 <script>
     let formCreateUser = document.getElementById("formCreateUser")
+    let del = document.querySelectorAll('.deleteBtn')
 
-    formCreateUser.addEventListener("submit", async(event) => {
+    for (let i = 0; i < del.length; i++) {
+        del[i].addEventListener('click', async (e) => {
+            let id = e.srcElement.offsetParent.nextSibling.parentElement.cells[0].innerText
+
+            var requestOptions = {
+                method: 'DELETE',
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:3000/usuariosDelete/"+id, requestOptions)
+                .then(response => response.json())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            location.reload();
+            console.log(response)
+        })
+    }
+
+    formCreateUser.addEventListener("submit", async (event) => {
         event.preventDefault();
         console.log("Capturando formulario");
-        try{
+        try {
+            const raw = JSON.stringify({
+                "nombre": createNombre.value,
+                "apellido": createApellido.value,
+                "email": createEmail.value
+            });
 
-                const raw = JSON.stringify({
-                    "nombre": createNombre.value,
-                    "apellido": createApellido.value,
-                    "email": createEmail.value
-                });
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
-                const myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
+            let response = await fetch("/usuarios", {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            });
 
-                let response = await fetch("/usuarios", {
-                    method: "POST",
-                    headers: myHeaders,
-                    body: raw,
-                    redirect: 'follow'
-                });
-
-                let data = await response.json();
-                if(data.code == 201){
-                    alert("Usuario creado con éxito.")
-                    formCreateUser.reset();
-                    location.reload();
-                }else{
-                    throw new Error("Error al guardar los datos en la BD.")
-                }
-        }catch(error){
+            let data = await response.json();
+            if (data.code == 201) {
+                alert("Usuario creado con éxito.")
+                formCreateUser.reset();
+                location.reload();
+            } else {
+                throw new Error("Error al guardar los datos en la BD.")
+            }
+        } catch (error) {
             alert(error.message)
         }
     })

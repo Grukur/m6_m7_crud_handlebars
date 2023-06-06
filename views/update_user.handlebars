@@ -12,7 +12,10 @@
             <input type="text" value="{{usuario.apellido}}" name="UpdateApellido" id="UpdateApellido" class="form-control" required>
             <label for="UpdateEmail" class="form-label">Nuevo Email</label>
             <input type="email" value="{{usuario.email}}" name="UpdateEmail" id="UpdateEmail" class="form-control" required>
-            <input type="submit" value="Actualizar" class="btn btn-primary">
+            <div>
+                <input type="submit" value="Actualizar" class="btn btn-primary">
+                <a class="btn btn-warning" href="/users">Inicio</a>
+            </div>
         </form>
     </div>
 </section>
@@ -28,7 +31,7 @@
 
     formUpdateUser.addEventListener("submit", async (event) => {
         event.preventDefault();
-        console.log("Capturando formulario");
+
         try {
             const raw = JSON.stringify({
                 "id":UpdateId.value,
@@ -50,7 +53,7 @@
             let data = await response.json();
             if (data.code == 201) {
                 location.reload();
-                alert("Usuario creado con éxito.")
+                alert("Usuario actualizado con éxito.")
             } else {
                 throw new Error("Error al guardar los datos en la BD.")
             }

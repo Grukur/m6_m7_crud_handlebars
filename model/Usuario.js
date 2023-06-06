@@ -35,7 +35,6 @@ class Usuario {
 
     async update(id) {
         let identificador = id || this.id
-        console.log(identificador)
         let todos = await this.findAll()
         let usuario = todos.usuarios.find(usuario => usuario.id == identificador);
 
@@ -43,15 +42,25 @@ class Usuario {
             usuario.nombre = this.nombre
             usuario.apellido = this.apellido
             usuario.email = this.email
-            await escribirArchivo("personas.json", todos, 'utf8');
+            await escribirArchivo("personas.json", todos);
             return true
         }else{
             return false
         }
     }
 
-    delete(id) {
-        console.log("Eliminar usuario");
+    async delete(id) {
+        let identificador = id || this.id
+        let todos = await this.findAll()
+        todos.usuarios = todos.usuarios.filter(usuario => usuario.id != identificador);
+        if(todos.usuarios){
+            console.log(todos.usuarios)
+            await escribirArchivo("personas.json", todos);
+            console.log('exito?', id)
+            return true
+        }else{
+            return false
+        }
     }
 }
 
