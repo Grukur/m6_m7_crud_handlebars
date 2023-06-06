@@ -1,0 +1,62 @@
+<h1 class="text-center">Página de actualización de usuario.</h1>
+
+<section>
+    <div class="w-75 mx-auto">
+        <h2 class="text-center">Formulario de modificacion de usuarios.</h2>
+        <form id="formUpdateUser">
+            <label for="UpdateId" class="form-label">Id</label>
+            <input type="hidden" value="{{usuario.id}}" name="UpdateId" id="UpdateId" class="form-control">
+            <label for="UpdateNombre" class="form-label">Nuevo Nombre</label>
+            <input type="text" value="{{usuario.nombre}}" name="UpdateNombre" id="UpdateNombre" class="form-control" required>
+            <label for="UpdateApellido" class="form-label">Nuevo Apellido</label>
+            <input type="text" value="{{usuario.apellido}}" name="UpdateApellido" id="UpdateApellido" class="form-control" required>
+            <label for="UpdateEmail" class="form-label">Nuevo Email</label>
+            <input type="email" value="{{usuario.email}}" name="UpdateEmail" id="UpdateEmail" class="form-control" required>
+            <input type="submit" value="Actualizar" class="btn btn-primary">
+        </form>
+    </div>
+</section>
+
+<style>
+    #formUpdateUser input {
+        margin: 3px 0px;
+    }
+</style>
+
+<script>
+    let formUpdateUser = document.getElementById("formUpdateUser")
+
+    formUpdateUser.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        console.log("Capturando formulario");
+        try {
+            const raw = JSON.stringify({
+                "id":UpdateId.value,
+                "nombre": UpdateNombre.value,
+                "apellido": UpdateApellido.value,
+                "email": UpdateEmail.value
+            });
+
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            let response = await fetch("/usuarios", {
+                method: "PUT",
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            });
+
+            let data = await response.json();
+            if (data.code == 201) {
+                location.reload();
+                alert("Usuario creado con éxito.")
+            } else {
+                throw new Error("Error al guardar los datos en la BD.")
+            }
+        } catch (error) {
+            alert(error.message)
+        }
+    })
+
+</script>

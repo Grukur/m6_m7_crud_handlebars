@@ -1,0 +1,34 @@
+{
+    "usuarios": [
+        {
+            "id": "1",
+            "nombre": "Mauriciopo",
+            "apellido": "Sotos",
+            "email": "mauricio@gmail.com"
+        },
+        {
+            "id": "2",
+            "nombre": "Juan",
+            "apellido": "Pérez",
+            "email": "juan@gmail.com"
+        },
+        {
+            "id": "3",
+            "nombre": "María",
+            "apellido": "Castillo",
+            "email": "maria@gmail.com"
+        },
+        {
+            "id": "37b282",
+            "nombre": "Nelson",
+            "apellido": "Ramírez",
+            "email": "nelson@gmail.com"
+        },
+        {
+            "id": "a362d5",
+            "nombre": "Israel",
+            "apellido": "Medoza",
+            "email": "israel@gmail.com"
+        }
+    ]
+}
